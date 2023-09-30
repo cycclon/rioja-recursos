@@ -1,10 +1,12 @@
 import React from 'react'
+import TiposCentros from '../componentes/centros/TiposCentros'
 
 const Inicio = () => {
   return (
-    <div>
-      Página principal
-    </div>
+    <>
+      <h2>Página principal</h2>
+      <TiposCentros />
+    </>
   )
 }
 
