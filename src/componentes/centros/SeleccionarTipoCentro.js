@@ -16,6 +16,8 @@ const SeleccionarTipoCentro = ({ titulo }, ref) => {
         }
     })
 
+
+    const SESION_TIPO_CENTRO = 'rrnc-tipo'
     const { tiposCentros, ListarTiposCentros } = useTiposCentros();
     const [ tipoSeleccionado, setTipoSeleccionado ] = useState('')
     const refNuevoTipo = useRef()
@@ -26,19 +28,24 @@ const SeleccionarTipoCentro = ({ titulo }, ref) => {
             tipo = refNuevoTipo.current.value
         }
         setTipoSeleccionado(tipo)
-        localStorage.setItem('rrnc-tipo', tipo)
+        sessionStorage.setItem(SESION_TIPO_CENTRO, tipo)
     }
 
     useEffect(()=>{
         if(localStorage.getItem('rrnc-tipo')!=='') setTipoSeleccionado((ts)=> {   
             if( tiposCentros.length >= 1) {         
                 const index = tiposCentros.map(tc => tc.nombre).
-                    indexOf(localStorage.getItem('rrnc-tipo'))            
-                if(index >= 0) document.getElementsByName(titulo)[index].checked = true
+                    indexOf(sessionStorage.getItem(SESION_TIPO_CENTRO))            
+                    if(index >= 0) {
+                        document.getElementsByName(titulo)[index].checked = true
+                        return sessionStorage.getItem(SESION_TIPO_CENTRO)
+                    }
+                    else {                        
+                        return ''
+                    }
             } else {
-                refNuevoTipo.current.value = localStorage.getItem('rrnc-tipo')
-            }
-            return localStorage.getItem('rrnc-tipo')      
+                return ''
+            }                  
         })
         
     },[tiposCentros])

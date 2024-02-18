@@ -1,9 +1,10 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 // COMPONENTES
 import Wizard from '../componentes/layout/Wizard'
 import SeleccionarTipoCentro from '../componentes/centros/SeleccionarTipoCentro'
 import NombreyDireccion from '../componentes/centros/NombreyDireccion'
+import SeleccionarAdministradores from '../componentes/centros/SeleccionarAdministradores'
 
 // CONTEXTO
 import { useUsuarioActivo } from '../componentes/contexto/ContextoUsuarioActivo'
@@ -12,21 +13,15 @@ const AdmGeneral = () => {
   const usuarioActivo = useUsuarioActivo()
   const refTipo = useRef()
   const refNombreDireccion = useRef()
+  const refAdministradores = useRef()
+  const nuevoCentro = {}
 
-  const nuevoCentro = {
-    nombre: '',
-    direccion: '',
-    coordenadas: '',
-    encargados: [],
-    tipo: ''
+  const finalizar = ()=>{    
+    console.log(nuevoCentro)
   }
 
-  const finalizar = (datos)=>{
-    nuevoCentro.nombre = datos.nombre
-    nuevoCentro.direccion = datos.direccion
-    nuevoCentro.coordenadas = datos.ubicacion
-    nuevoCentro.tipo = datos.tipo
-    console.log(nuevoCentro)
+  const agregarDatos = (datos)=>{
+    for(let valor in datos) nuevoCentro[valor] = datos[valor]
   }
 
   return (
@@ -35,10 +30,11 @@ const AdmGeneral = () => {
       {usuarioActivo.nivel <= 2 ? <Wizard 
         pasos={[ 
                 <SeleccionarTipoCentro titulo="tipo" ref={ refTipo } />, 
-                <NombreyDireccion titulo="nombre" ref={ refNombreDireccion } />
+                <NombreyDireccion titulo="nombre" ref={ refNombreDireccion } />,
+                <SeleccionarAdministradores titulo='administradores' ref={ refAdministradores }/>
               ]}
-        refs={[refTipo, refNombreDireccion]}
-        titulo='Registrar centro' finalizar={ finalizar } /> : ''}
+        refs={[refTipo, refNombreDireccion, refAdministradores]}
+        titulo='Registrar centro' finalizar={ finalizar } agregarDatos={ agregarDatos } /> : ''}
     </div>
   )
 }

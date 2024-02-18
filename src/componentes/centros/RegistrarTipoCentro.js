@@ -2,17 +2,18 @@ import { useRef } from "react";
 
 // CUSTOM HOOKS
 import useTiposCentros from "./useTiposCentros";
-import { toast } from "react-toastify";
+import useMensajeria from "../hooks/useMensajeria"
 
 const RegistrarTipoCentro = ({ mostrar, ListarTC }) => {
     const modal = useRef()
     const refNuevoTipo = useRef()
     const { AgregarTipo } = useTiposCentros()
+    const { procesarMensaje } = useMensajeria()
 
     const registrarTipoCentro = async ()=>{        
         const resultado = await AgregarTipo(refNuevoTipo.current.value)        
         await ListarTC()
-        toast.success(resultado.mensaje)
+        procesarMensaje(resultado)
         modal.current.close()
     }
 

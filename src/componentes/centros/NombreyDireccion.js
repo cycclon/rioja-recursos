@@ -4,6 +4,10 @@ import React, { useImperativeHandle, useRef, useEffect } from "react";
 import useGoogleMapsSearch from "../hooks/useGoogleMapsSearch";
 
 const NombreyDireccion = ({ titulo }, ref) => {
+    const SESION_NOMBRE = 'rrnd-nombre'
+    const SESION_DIRECCION = 'rrnd-direccion'
+    const SESION_UBICACION = 'rrnd-ubicacion'
+
     const refDireccion = useRef()
     const refNombre = useRef()
     const refUbicacion = useRef()
@@ -29,17 +33,17 @@ const NombreyDireccion = ({ titulo }, ref) => {
     })
 
     useEffect(()=>{
-        refNombre.current.value = localStorage.getItem('rrnd-nombre')
-        refDireccion.current.value = localStorage.getItem('rrnd-direccion')
-        refUbicacion.current.value = localStorage.getItem('rrnd-ubicacion')
+        refNombre.current.value = sessionStorage.getItem(SESION_NOMBRE)
+        refDireccion.current.value = sessionStorage.getItem(SESION_DIRECCION)
+        refUbicacion.current.value = sessionStorage.getItem(SESION_UBICACION)
         actualizarGoogleLink()
     },[])
 
     const manejarCampos = ()=>{
         actualizarGoogleLink()
-        localStorage.setItem('rrnd-nombre', refNombre.current.value)
-        localStorage.setItem('rrnd-direccion', refDireccion.current.value)
-        localStorage.setItem('rrnd-ubicacion', refUbicacion.current.value)
+        sessionStorage.setItem(SESION_NOMBRE, refNombre.current.value)
+        sessionStorage.setItem(SESION_DIRECCION, refDireccion.current.value)
+        sessionStorage.setItem(SESION_UBICACION, refUbicacion.current.value)
     }
 
     return ( <>

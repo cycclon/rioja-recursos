@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
 
-const Wizard = ({ pasos = [], refs=[], titulo = '', finalizar }) => {
+// CUSTOM HOOKS
+import useMensajeria from "../hooks/useMensajeria";
+
+const Wizard = ({ pasos = [], refs=[], titulo = '', agregarDatos, finalizar }) => {
     const [pasoActual, setPasoActual] = useState(0);    
-    const [ datosFinales, setDatosFinales ] = useState({})
+    
+    const { procesarMensaje } = useMensajeria()
 
-    const siguiente = (e) => {
-        e.preventDefault()
-        const datos = refs[pasoActual].current.obtenerDatos()
+    const siguiente = async () => {
+        const datos = refs[pasoActual].current.obtenerDatos()  
+        //console.log(datos)
         
-        if(datos.error === 1){
-            toast.error(datos.mensaje)
-        } else {
-            setDatosFinales(df=> df = {...df, ...datos})
-            
+        if(procesarMensaje(datos)){
+            agregarDatos(datos)
+
             if (pasoActual < pasos.length - 1) {setPasoActual((pa) => pa + 1)}
             else {                                
-                finalizar(datosFinales)
+                finalizar()
             }
-        }        
+        }
     }
 
-    const anterior = (e) => {
-        e.preventDefault()
+    const anterior = () => {
         if (pasoActual > 0) setPasoActual((pa) => pa - 1)
     }
 
@@ -31,8 +31,8 @@ const Wizard = ({ pasos = [], refs=[], titulo = '', finalizar }) => {
             <h3>{titulo} <small>Paso {pasoActual + 1} de {pasos.length}</small></h3>
             {pasos[pasoActual]}
             <br />
-            {pasoActual > 0 && <button onClick={ (e) => anterior(e)}>Anterior</button>}            
-            <button onClick={ (e) => siguiente(e)}>
+            {pasoActual > 0 && <button onClick={ anterior }>Anterior</button>}            
+            <button onClick={ siguiente }>
                 {pasoActual === pasos.length - 1 ? 'Finalizar' : 'Siguiente'}
             </button>
         </>

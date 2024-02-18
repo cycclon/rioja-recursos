@@ -18,7 +18,6 @@ const TiposCentros = ({ }) => {
         })
     }
 
-
     function checkChanged(){
         let checked = []
         checkTiposCentros.current.map((el, i)=>{if(el.checked) checked.push(el.id)})
